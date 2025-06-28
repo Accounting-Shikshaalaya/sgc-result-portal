@@ -154,86 +154,85 @@
         © Md. Shahed Mostafa Chowdhury, Lecturer, Dept. of Accounting, SGC.
       </footer>
     </div>
+<script>
+  let expected = Math.floor(1000 + Math.random() * 9000).toString();
+  document.getElementById("expectedCaptcha").innerText = expected;
 
-    <script>
-      let expected = Math.floor(1000 + Math.random() * 9000).toString();
-      document.getElementById("expectedCaptcha").innerText = expected;
+  function getResult() {
+    const roll = document.getElementById("roll").value.trim();
+    const classYear = document.getElementById("classYear").value;
+    const captcha = document.getElementById("captcha").value.trim();
 
-      function getResult() {
-        const roll = document.getElementById("roll").value.trim();
-        const classYear = document.getElementById("classYear").value;
-        const captcha = document.getElementById("captcha").value.trim();
+    if (!roll || !captcha) {
+      alert("Please fill in all fields.");
+      return;
+    }
 
-        if (!roll || !captcha) {
-          alert("Please fill in all fields.");
-          return;
-        }
+    const loadingDiv = document.getElementById("loading");
+    loadingDiv.style.display = "block";
+    loadingDiv.innerText = "Please wait, your result is being processed...";
 
-        const loadingDiv = document.getElementById("loading");
-        loadingDiv.style.display = "block";
-        loadingDiv.innerText = "Please wait, your result is being processed...";
+    // ✅ Your deployed URL
+    const url = `https://script.google.com/macros/s/AKfycbztxAycNfMe7dJCc3p8UN6WbNH2MXKlopLgxk63MNdn_FPneFV0iN4RD1mGFjpiEfAEFw/exec` +
+      `?roll=${encodeURIComponent(roll)}` +
+      `&classYear=${encodeURIComponent(classYear)}` +
+      `&captcha=${encodeURIComponent(captcha)}` +
+      `&expectedCaptcha=${encodeURIComponent(expected)}`;
 
-        const url = `https://script.google.com/macros/s/AKfycbxODW7DaPvNZSub3Ebgl5QZaDDxmtOI4I8u3AYCfAwk/exec` +
-  `?roll=${encodeURIComponent(roll)}` +
-  `&classYear=${encodeURIComponent(classYear)}` +
-  `&captcha=${encodeURIComponent(captcha)}` +
-  `&expectedCaptcha=${encodeURIComponent(expected)}`;
+    fetch(url)
+      .then(response => {
+        if (!response.ok) throw new Error("Network response was not ok");
+        return response.json();
+      })
+      .then(result => {
+        loadingDiv.style.display = "none";
+        showLink(result);
+      })
+      .catch(error => {
+        loadingDiv.style.display = "none";
+        alert("Error: " + error.message);
+      });
+  }
 
-fetch(url)
-  .then(response => response.json())
-  .then(result => {
-    loadingDiv.style.display = "none";
-    showLink(result);
-  })
-  .catch(error => {
-    loadingDiv.style.display = "none";
-    alert("Error: " + error.message);
-  });
+  function showLink(result) {
+    const linkDiv = document.getElementById("link");
+    linkDiv.innerHTML = "";
+    linkDiv.classList.remove("not-found");
 
-        .then(response => response.json())
-        .then(result => {
-          loadingDiv.style.display = "none";
-          showLink(result);
-        })
-        .catch(error => {
-          loadingDiv.style.display = "none";
-          alert("Error: " + error.message);
-        });
-      }
+    if (result.status === "success") {
+      linkDiv.innerHTML = `<a href="${result.pdfUrl}" target="_blank">📄 View/Download Result</a>`;
+      linkDiv.dataset.pdf = result.pdfUrl;
+    } else if (result.status === "notfound") {
+      linkDiv.classList.add("not-found");
+      linkDiv.innerText = "Roll/Registration Not Found";
+    } else {
+      alert(result.message);
+    }
+  }
 
-      function showLink(result) {
-        const linkDiv = document.getElementById("link");
-        linkDiv.innerHTML = "";
-        linkDiv.classList.remove("not-found");
+  function resetForm() {
+    document.getElementById("roll").value = "";
+    document.getElementById("captcha").value = "";
+    document.getElementById("link").innerHTML = "";
+    document.getElementById("link").classList.remove("not-found");
+    expected = Math.floor(1000 + Math.random() * 9000).toString();
+    document.getElementById("expectedCaptcha").innerText = expected;
+  }
 
-        if (result.status === "success") {
-          linkDiv.innerHTML = `<a href="${result.pdfUrl}" target="_blank">📄 View/Download Result</a>`;
-          linkDiv.dataset.pdf = result.pdfUrl;
-        } else if (result.status === "notfound") {
-          linkDiv.classList.add("not-found");
-          linkDiv.innerText = "Roll/Registration Not Found";
-        } else {
-          alert(result.message);
-        }
-      }
+  function printPDF() {
+    const link = document.getElementById("link").dataset.pdf;
+    if (link) {
+      window.open(link, '_blank');
+    } else {
+      alert("Please search and load a result first.");
+    }
+  }
 
-      function resetForm() {
-        document.getElementById("roll").value = "";
-        document.getElementById("captcha").value = "";
-        document.getElementById("link").innerHTML = "";
-        document.getElementById("link").classList.remove("not-found");
-        expected = Math.floor(1000 + Math.random() * 9000).toString();
-        document.getElementById("expectedCaptcha").innerText = expected;
-      }
-
-      function printPDF() {
-        const link = document.getElementById("link").dataset.pdf;
-        if (link) {
-          window.open(link, '_blank');
-        } else {
-          alert("Please search and load a result first.");
-        }
-      }
-    </script>
+  window.onload = function () {
+    // static dropdown for now
+    expected = Math.floor(1000 + Math.random() * 9000).toString();
+    document.getElementById("expectedCaptcha").innerText = expected;
+  };
+</script>
   </body>
 </html>
