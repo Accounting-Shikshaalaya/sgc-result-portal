@@ -173,11 +173,23 @@
         loadingDiv.style.display = "block";
         loadingDiv.innerText = "Please wait, your result is being processed...";
 
-        fetch("https://script.google.com/macros/s/AKfycbxGWtvZCQoxJM0qHmJeYK99AojWC69JVLdqkDgy2Doq72tEvE_zQWHtzl79eQZXDMukUw/exec", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ roll, classYear, captcha, expectedCaptcha: expected })
-        })
+        const url = `https://script.google.com/macros/s/AKfycbxODW7DaPvNZSub3Ebgl5QZaDDxmtOI4I8u3AYCfAwk/exec` +
+  `?roll=${encodeURIComponent(roll)}` +
+  `&classYear=${encodeURIComponent(classYear)}` +
+  `&captcha=${encodeURIComponent(captcha)}` +
+  `&expectedCaptcha=${encodeURIComponent(expected)}`;
+
+fetch(url)
+  .then(response => response.json())
+  .then(result => {
+    loadingDiv.style.display = "none";
+    showLink(result);
+  })
+  .catch(error => {
+    loadingDiv.style.display = "none";
+    alert("Error: " + error.message);
+  });
+
         .then(response => response.json())
         .then(result => {
           loadingDiv.style.display = "none";
