@@ -227,7 +227,30 @@
         alert("Please search and load a result first.");
       }
     }
+function checkIfExpired() {
+  const url = "https://script.google.com/macros/s/AKfycbztxAycNfMe7dJCc3p8UN6WbNH2MXKlopLgxk63MNdn_FPneFV0iN4RD1mGFjpiEfAEFw/exec?action=checkActive";
+  const proxyUrl = "https://corsproxy.io/?" + encodeURIComponent(url);
 
+  fetch(proxyUrl)
+    .then(res => res.json())
+    .then(data => {
+      if (!data.active) {
+        // Hide input form & buttons
+        document.getElementById("formArea").style.display = "none";
+        document.getElementById("loading").style.display = "none";
+        document.getElementById("link").style.display = "none";
+        document.getElementById("closedMessage").style.display = "block";
+      } else {
+        // Show form
+        document.getElementById("formArea").style.display = "block";
+        document.getElementById("closedMessage").style.display = "none";
+      }
+    })
+    .catch(err => {
+      console.error("Could not check status", err);
+      // If error checking, you can choose to allow or block form by default
+    });
+}
     window.onload = function () {
       expected = Math.floor(1000 + Math.random() * 9000).toString();
       document.getElementById("expectedCaptcha").innerText = expected;
