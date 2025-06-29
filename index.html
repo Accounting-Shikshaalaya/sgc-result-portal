@@ -252,9 +252,10 @@ function checkIfExpired() {
     });
 }
     window.onload = function () {
-      expected = Math.floor(1000 + Math.random() * 9000).toString();
-      document.getElementById("expectedCaptcha").innerText = expected;
-    };
+  expected = Math.floor(1000 + Math.random() * 9000).toString();
+  document.getElementById("expectedCaptcha").innerText = expected;
+  checkIfExpired();  // ✅ Call the function to check expiration
+};
   </script>
 </body>
 </html>
