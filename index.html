@@ -29,11 +29,29 @@
   border-radius: 8px;
 }
 
-h2 {
-  margin-top: 4px;                  /* Small space below logo */
-  margin-bottom: 10px;
+.heading {
+  text-align: center;
+  margin-top: 4px;
+  margin-bottom: 15px;
+}
+
+.college {
   font-size: 28px;
-  text-align: center;               /* Center heading */
+  font-weight: bold;
+  color: #004080;
+}
+
+.dept {
+  font-size: 18px;
+  color: #004080;
+  margin-top: 4px;
+}
+
+.portal {
+  font-size: 20px;
+  font-weight: 500;
+  color: #004080;
+  margin-top: 4px;
 }
 
     label {
@@ -123,7 +141,11 @@ h2 {
 <body>
   <div class="container">
     <img src="https://accounting-shikshaalaya.github.io/sgc-result-portal/sgc-logo.png" class="logo" alt="SGC Logo">
-    <h2><span class="emoji">🎓</span> Satkhira Govt. College Result Portal</h2>
+    <div class="heading">
+  <div class="college">🎓 Satkhira Govt. College</div>
+  <div class="dept">Department of Accounting</div>
+  <div class="portal">Result Portal</div>
+</div>
 
     <div id="closedMessage">⚠️ Result access has been closed.</div>
 
