@@ -114,9 +114,11 @@
       font-weight: bold;
       margin-top: 40px;
     }
-
+.captcha-code {
+  margin-bottom: 6px;  /* Reduced bottom spacing */
+}
     footer {
-      margin-top: 40px;
+      margin-top: 30px;
       font-size: 14px;
       color: #444;
       text-align: center;
@@ -164,8 +166,7 @@
 
       <label for="captcha">Enter Verification Code:</label>
       <input type="text" id="captcha">
-      <p><strong id="expectedCaptcha"></strong></p>
-
+      <p class="captcha-code"><strong id="expectedCaptcha"></strong></p>
       <button onclick="getResult()">Search Result</button>
       <button onclick="resetForm()">Reset</button>
       <button onclick="printPDF()">Print</button>
