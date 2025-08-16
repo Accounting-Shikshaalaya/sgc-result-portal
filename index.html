@@ -53,6 +53,10 @@
     button:hover {
       background: #1d5fe0;
     }
+    #output {
+      margin-top: 15px;
+      text-align: left;
+    }
     footer {
       margin-top: 25px;
       font-size: 13px;
@@ -62,7 +66,7 @@
 </head>
 <body>
   <div class="container">
-    <img src="logo.png" alt="SGC Logo" class="logo" />
+    <img src="https://accounting-shikshaalaya.github.io/sgc-result-portal/sgc-logo.png" alt="SGC Logo" class="logo" />
     <h1>🎓 Satkhira Govt. College Result Portal</h1>
     
     <label for="roll">Enter Roll Number:</label>
@@ -92,28 +96,36 @@
 
   <script>
     async function getResult() {
-      const roll = document.getElementById('roll').value;
+      const roll = document.getElementById('roll').value.trim();
       const cls = document.getElementById('class').value;
-      const code = document.getElementById('code').value;
+      const code = document.getElementById('code').value.trim();
 
       if (!roll || !cls || !code) {
         alert("Please fill all fields!");
         return;
       }
 
-      // 👇 Replace with your deployed Apps Script Web App URL
+      // Your Apps Script URL
       const url = "https://script.google.com/macros/s/AKfycbxODW7DaPvNZSub3Ebgl5QZaDDxmtOI4I8u3AYCfAwk/exec";
 
+      // Use free CORS proxy for GitHub Pages
+      const proxy = "https://corsproxy.io/?";
+      const fullUrl = `${url}?roll=${roll}&class=${encodeURIComponent(cls)}&code=${encodeURIComponent(code)}`;
+
       try {
-        const res = await fetch(`${url}?roll=${roll}&class=${encodeURIComponent(cls)}&code=${code}`);
+        const res = await fetch(proxy + encodeURIComponent(fullUrl));
         const data = await res.json();
 
-        document.getElementById('output').innerHTML = `
-          <h3>Result</h3>
-          <p><strong>Roll:</strong> ${data.roll}</p>
-          <p><strong>Name:</strong> ${data.name}</p>
-          <p><strong>Result:</strong> ${data.result}</p>
-        `;
+        if (data.status === "success") {
+          document.getElementById('output').innerHTML = `
+            <h3>Result</h3>
+            <p><strong>Roll:</strong> ${data.roll}</p>
+            <p><strong>Name:</strong> ${data.name}</p>
+            <p><strong>Result:</strong> ${data.result}</p>
+          `;
+        } else {
+          document.getElementById('output').innerHTML = `<p style="color:red;">${data.message || 'Roll not found!'}</p>`;
+        }
       } catch (err) {
         document.getElementById('output').innerHTML = "<p style='color:red;'>Error fetching result!</p>";
       }
