@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
   <title>SGC Result Portal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: #f9f9f9;
+      background: #f0f8ff;
       text-align: center;
-      padding: 20px;
+      padding-top: 80px;
     }
     .container {
       max-width: 400px;
@@ -17,119 +17,39 @@
       background: #fff;
       padding: 25px;
       border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      box-shadow: 0px 4px 15px rgba(0,0,0,0.2);
     }
-    img.logo {
-      width: 80px;
-      margin-bottom: 15px;
+    .logo {
+      width: 70px;
+      margin-bottom: 10px;
     }
-    h1 {
-      font-size: 20px;
-      margin-bottom: 20px;
+    h2 {
+      color: #004080;
     }
-    label {
-      display: block;
-      text-align: left;
-      margin: 10px 0 5px;
-      font-weight: bold;
-    }
-    input, select {
-      width: 100%;
-      padding: 10px;
-      margin-bottom: 15px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-    }
-    button {
-      width: 100%;
-      padding: 12px;
-      background: #2a73ff;
+    a.button {
+      display: inline-block;
+      margin-top: 15px;
+      padding: 10px 20px;
+      background: #006400;
       color: #fff;
-      border: none;
+      text-decoration: none;
       border-radius: 6px;
       font-size: 16px;
-      cursor: pointer;
     }
-    button:hover {
-      background: #1d5fe0;
-    }
-    #output {
-      margin-top: 15px;
-      text-align: left;
-    }
-    footer {
-      margin-top: 25px;
-      font-size: 13px;
-      color: #555;
+    a.button:hover {
+      background: #004d00;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <img src="https://accounting-shikshaalaya.github.io/sgc-result-portal/sgc-logo.png" alt="SGC Logo" class="logo" />
-    <h1>🎓 Satkhira Govt. College Result Portal</h1>
-    
-    <label for="roll">Enter Roll Number:</label>
-    <input type="text" id="roll" placeholder="e.g. 101" />
-
-    <label for="class">Select Class/Year:</label>
-    <select id="class">
-      <option value="">--Select--</option>
-      <option>Hons. 1st Year</option>
-      <option>Hons. 2nd Year</option>
-      <option>Hons. 3rd Year</option>
-      <option>Hons. 4th Year</option>
-      <option>Masters Final</option>
-    </select>
-
-    <label for="code">Enter Verification Code:</label>
-    <input type="text" id="code" placeholder="7753" />
-
-    <button onclick="getResult()">Get Result</button>
-
-    <div id="output"></div>
+    <img src="https://accounting-shikshaalaya.github.io/sgc-result-portal/sgc-logo.png" class="logo" alt="SGC Logo">
+    <h2>🎓 Satkhira Govt. College</h2>
+    <p>Department of Accounting</p>
+    <p><strong>Result Portal</strong></p>
+    <a class="button" href="https://script.google.com/macros/s/AKfycbw8jJM-q5mIMSbwVlhjlO93f4lFC_YtfIML7hCypPdFAi7Ae1aZoCIrqFdHjTea7qHh/exec" target="_blank">
+      Enter Result Portal
+    </a>
   </div>
-
-  <footer>
-    © Md. Shahed Mostafa Chowdhury, Lecturer, Dept. of Accounting, SGC.
-  </footer>
-
-  <script>
-    async function getResult() {
-      const roll = document.getElementById('roll').value.trim();
-      const cls = document.getElementById('class').value;
-      const code = document.getElementById('code').value.trim();
-
-      if (!roll || !cls || !code) {
-        alert("Please fill all fields!");
-        return;
-      }
-
-      // Your Apps Script URL
-      const url = "https://script.google.com/macros/s/AKfycbxODW7DaPvNZSub3Ebgl5QZaDDxmtOI4I8u3AYCfAwk/exec";
-
-      // Use free CORS proxy for GitHub Pages
-      const proxy = "https://corsproxy.io/?";
-      const fullUrl = `${url}?roll=${roll}&class=${encodeURIComponent(cls)}&code=${encodeURIComponent(code)}`;
-
-      try {
-        const res = await fetch(proxy + encodeURIComponent(fullUrl));
-        const data = await res.json();
-
-        if (data.status === "success") {
-          document.getElementById('output').innerHTML = `
-            <h3>Result</h3>
-            <p><strong>Roll:</strong> ${data.roll}</p>
-            <p><strong>Name:</strong> ${data.name}</p>
-            <p><strong>Result:</strong> ${data.result}</p>
-          `;
-        } else {
-          document.getElementById('output').innerHTML = `<p style="color:red;">${data.message || 'Roll not found!'}</p>`;
-        }
-      } catch (err) {
-        document.getElementById('output').innerHTML = "<p style='color:red;'>Error fetching result!</p>";
-      }
-    }
-  </script>
 </body>
 </html>
