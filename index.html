@@ -1,42 +1,123 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SGC Result Portal</title>
   <style>
     body {
-      margin: 0;
-      padding: 0;
       font-family: Arial, sans-serif;
-      background: #f5faff;
+      background: #f9f9f9;
       text-align: center;
-    }
-    header {
       padding: 20px;
     }
-    .logo {
-      width: 90px;
+    .container {
+      max-width: 400px;
+      margin: auto;
+      background: #fff;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    img.logo {
+      width: 80px;
+      margin-bottom: 15px;
+    }
+    h1 {
+      font-size: 20px;
+      margin-bottom: 20px;
+    }
+    label {
       display: block;
-      margin: 0 auto 10px auto;
+      text-align: left;
+      margin: 10px 0 5px;
+      font-weight: bold;
     }
-    h2 {
-      margin: 5px 0;
-      color: #004080;
-    }
-    iframe {
+    input, select {
       width: 100%;
-      height: 90vh;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #2a73ff;
+      color: #fff;
       border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #1d5fe0;
+    }
+    footer {
+      margin-top: 25px;
+      font-size: 13px;
+      color: #555;
     }
   </style>
 </head>
 <body>
-  <header>
-    <img src="https://accounting-shikshaalaya.github.io/sgc-result-portal/sgc-logo.png" class="logo" alt="SGC Logo">
-    <h2>🎓 Satkhira Govt. College</h2>
-    <p>Department of Accounting – Result Portal</p>
-  </header>
+  <div class="container">
+    <img src="logo.png" alt="SGC Logo" class="logo" />
+    <h1>🎓 Satkhira Govt. College Result Portal</h1>
+    
+    <label for="roll">Enter Roll Number:</label>
+    <input type="text" id="roll" placeholder="e.g. 101" />
 
-  <iframe src="https://script.google.com/macros/s/AKfycbztxAycNfMe7dJCc3p8UN6WbNH2MXKlopLgxk63MNdn_FPneFV0iN4RD1mGFjpiEfAEFw/exec"></iframe>
+    <label for="class">Select Class/Year:</label>
+    <select id="class">
+      <option value="">--Select--</option>
+      <option>Hons. 1st Year</option>
+      <option>Hons. 2nd Year</option>
+      <option>Hons. 3rd Year</option>
+      <option>Hons. 4th Year</option>
+      <option>Masters Final</option>
+    </select>
+
+    <label for="code">Enter Verification Code:</label>
+    <input type="text" id="code" placeholder="7753" />
+
+    <button onclick="getResult()">Get Result</button>
+
+    <div id="output"></div>
+  </div>
+
+  <footer>
+    © Md. Shahed Mostafa Chowdhury, Lecturer, Dept. of Accounting, SGC.
+  </footer>
+
+  <script>
+    async function getResult() {
+      const roll = document.getElementById('roll').value;
+      const cls = document.getElementById('class').value;
+      const code = document.getElementById('code').value;
+
+      if (!roll || !cls || !code) {
+        alert("Please fill all fields!");
+        return;
+      }
+
+      // 👇 Replace with your deployed Apps Script Web App URL
+      const url = "https://script.google.com/macros/s/AKfycbxODW7DaPvNZSub3Ebgl5QZaDDxmtOI4I8u3AYCfAwk/exec";
+
+      try {
+        const res = await fetch(`${url}?roll=${roll}&class=${encodeURIComponent(cls)}&code=${code}`);
+        const data = await res.json();
+
+        document.getElementById('output').innerHTML = `
+          <h3>Result</h3>
+          <p><strong>Roll:</strong> ${data.roll}</p>
+          <p><strong>Name:</strong> ${data.name}</p>
+          <p><strong>Result:</strong> ${data.result}</p>
+        `;
+      } catch (err) {
+        document.getElementById('output').innerHTML = "<p style='color:red;'>Error fetching result!</p>";
+      }
+    }
+  </script>
 </body>
 </html>
