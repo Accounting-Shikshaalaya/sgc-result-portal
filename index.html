@@ -38,24 +38,5 @@
   <div id="output"></div>
 </div>
 <footer>© Md. Shahed Mostafa Chowdhury, Lecturer, Dept. of Accounting, SGC.</footer>
-
-<script>
-async function getResult() {
-  const r=document.getElementById('roll').value.trim();
-  const c=document.getElementById('class').value;
-  const v=document.getElementById('code').value.trim();
-  if(!r||!c||!v){alert("Fill all fields!");return;}
-
-  const url="https://script.google.com/macros/s/AKfycbxODW7DaPvNZSub3Ebgl5QZaDDxmtOI4I8u3AYCfAwk/exec";
-  const proxy="https://corsproxy.io/?";
-  try{
-    const res=await fetch(proxy+encodeURIComponent(`${url}?roll=${r}&class=${encodeURIComponent(c)}&code=${v}`));
-    const data=await res.json();
-    document.getElementById('output').innerHTML=data.status==="success"?
-      `<h3>Result</h3><p><b>Roll:</b> ${data.roll}</p><p><b>Name:</b> ${data.name}</p><p><b>Result:</b> ${data.result}</p>`:
-      `<p style='color:red;'>${data.message||"Roll not found!"}</p>`;
-  }catch(e){document.getElementById('output').innerHTML="<p style='color:red;'>Error fetching result!</p>";}
-}
-</script>
 </body>
 </html>
